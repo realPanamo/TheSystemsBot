@@ -21,9 +21,12 @@ import java.io.File;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class TheSystemsBot {
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    public static final ExecutorService THREAD_POOL = Executors.newCachedThreadPool();
 
     public static void main(String[] args) {
         try {

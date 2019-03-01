@@ -4,6 +4,8 @@ import com.arangodb.ArangoDB;
 import com.arangodb.ArangoDatabase;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import de.panamo.thesystems.discord.command.CommandConfiguration;
+import de.panamo.thesystems.discord.command.CommandFeature;
 import de.panamo.thesystems.discord.configuration.provider.ConfigurationProvider;
 import de.panamo.thesystems.discord.configuration.provider.FileConfigurationProvider;
 import de.panamo.thesystems.discord.configuration.GeneralConfiguration;
@@ -88,7 +90,7 @@ public class TheSystemsBot {
 
         this.addFeature(new RichPresenceFeature(), "richpresence", new RichPresenceConfiguration());
         this.addFeature(new ReactionChannelFeature(), "reactionchannel", new ReactionChannelConfiguration());
-        this.jda.addEventListener();
+        this.addFeature(new CommandFeature(), "command", new CommandConfiguration());
     }
 
     private BotConfiguration loadConfiguration() {

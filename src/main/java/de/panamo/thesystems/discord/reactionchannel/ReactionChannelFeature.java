@@ -15,7 +15,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ReactionChannelFeature extends ListenerAdapter implements BotFeature<ReactionChannelConfiguration> {
-
     private TheSystemsBot instance;
     private Collection<ReactionChannelCategory> reactionChannelCategories;
     private Map<String, ReactionChannelListener> listeners = new HashMap<>();

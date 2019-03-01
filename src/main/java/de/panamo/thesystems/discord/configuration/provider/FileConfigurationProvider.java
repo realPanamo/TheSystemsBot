@@ -2,7 +2,6 @@ package de.panamo.thesystems.discord.configuration.provider;
 
 import de.panamo.thesystems.discord.TheSystemsBot;
 import de.panamo.thesystems.discord.configuration.GeneralConfiguration;
-
 import java.io.*;
 
 public class FileConfigurationProvider {

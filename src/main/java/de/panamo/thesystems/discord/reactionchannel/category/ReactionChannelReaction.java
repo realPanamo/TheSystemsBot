@@ -3,7 +3,6 @@ package de.panamo.thesystems.discord.reactionchannel.category;
 import java.util.Collection;
 
 public class ReactionChannelReaction {
-
     private String emote;
     private Collection<Long> allowedRanks;
 

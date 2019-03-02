@@ -12,10 +12,11 @@ public class ReactionChannelListener {
      *
      * @param event the JDA-event for new messages
      * @param category the category the event was triggered on
+     * @return if there should be reactions added to the new message
      */
 
-    public void handleMessageSent(MessageReceivedEvent event, ReactionChannelCategory category) {
-
+    public boolean handleMessageSent(MessageReceivedEvent event, ReactionChannelCategory category) {
+        return true;
     }
 
     /**

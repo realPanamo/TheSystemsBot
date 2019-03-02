@@ -12,15 +12,15 @@ public class RichPresenceConfiguration implements GeneralConfiguration {
     private long changeMillis = TimeUnit.SECONDS.toMillis(30);
     private List<RichPresence> richPresences = new ArrayList<>();
 
-    long getChangeMillis() {
+    public long getChangeMillis() {
         return changeMillis;
     }
 
-    List<RichPresence> getRichPresences() {
+    public List<RichPresence> getRichPresences() {
         return richPresences;
     }
 
-    public class RichPresence {
+    public static class RichPresence {
 
         private Game.GameType gameType;
         private String text;
@@ -28,6 +28,10 @@ public class RichPresenceConfiguration implements GeneralConfiguration {
         public RichPresence(Game.GameType gameType, String text) {
             this.gameType = gameType;
             this.text = text;
+        }
+
+        public String getText() {
+            return text;
         }
 
         Game toGame() {

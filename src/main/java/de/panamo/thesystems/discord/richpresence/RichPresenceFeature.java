@@ -9,11 +9,14 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class RichPresenceFeature implements BotFeature<RichPresenceConfiguration> {
+    private RichPresenceConfiguration configuration;
     private Timer timer = new Timer();
     private Random random = new Random();
 
     @Override
     public void handleStart(TheSystemsBot instance, RichPresenceConfiguration configuration) {
+        this.configuration = configuration;
+
         List<RichPresenceConfiguration.RichPresence> richPresences = configuration.getRichPresences();
         if(richPresences.isEmpty())
             return;
@@ -30,5 +33,10 @@ public class RichPresenceFeature implements BotFeature<RichPresenceConfiguration
     @Override
     public void handleStop() {
         this.timer.cancel();
+    }
+
+    @Override
+    public RichPresenceConfiguration getConfiguration() {
+        return this.configuration;
     }
 }

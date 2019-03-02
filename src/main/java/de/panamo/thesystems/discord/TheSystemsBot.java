@@ -17,7 +17,10 @@ import de.panamo.thesystems.discord.richpresence.RichPresenceFeature;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.OnlineStatus;
+import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
+import net.dv8tion.jda.core.entities.User;
+
 import javax.security.auth.login.LoginException;
 import java.io.File;
 import java.util.Collection;
@@ -43,7 +46,7 @@ public class TheSystemsBot {
     private ArangoDatabase database;
 
     private Map<Class<? extends BotFeature>, BotFeature> features = new HashMap<>();
-    private ConfigurationProvider configCollectionManager;
+    private ConfigurationProvider configurationProvider;
 
     private TheSystemsBot() throws LoginException {
         System.out.println("Loading Config...");
@@ -58,8 +61,6 @@ public class TheSystemsBot {
                 .setAutoReconnect(true)
                 .setEnableShutdownHook(true)
                 .build();
-
-        Runtime.getRuntime().addShutdownHook(new Thread(this.handleShutdown()));
 
         System.out.println("Connecting to ArangoDB...");
 
@@ -78,7 +79,7 @@ public class TheSystemsBot {
 
         System.out.println("Successfully connected!");
 
-        this.configCollectionManager = new ConfigurationProvider(this.database);
+        this.configurationProvider = new ConfigurationProvider(this.database);
 
         try {
             this.jda.awaitReady();
@@ -87,10 +88,7 @@ public class TheSystemsBot {
         }
 
         System.out.println("Adding features...");
-
-        this.addFeature(new RichPresenceFeature(), "richpresence", new RichPresenceConfiguration());
-        this.addFeature(new ReactionChannelFeature(), "reactionchannel", new ReactionChannelConfiguration());
-        this.addFeature(new CommandFeature(), "command", new CommandConfiguration());
+        this.addFeatures();
     }
 
     private BotConfiguration loadConfiguration() {
@@ -108,22 +106,49 @@ public class TheSystemsBot {
         return botConfiguration;
     }
 
-    private Runnable handleShutdown() {
-        return () -> {
-            for(BotFeature feature : this.features.values())
-                feature.handleStop();
-        };
+    private void addFeatures() {
+        this.addFeature(new RichPresenceFeature(), "richpresence", new RichPresenceConfiguration());
+        this.addFeature(new ReactionChannelFeature(), "reactionchannel", new ReactionChannelConfiguration());
+        this.addFeature(new CommandFeature(), "command", new CommandConfiguration());
     }
 
-    public boolean memberHasRole(Member user, Collection<Long> roleIds) {
-        return roleIds.isEmpty() || user.getRoles().stream().filter(role -> roleIds.contains(role.getIdLong())).findFirst().orElse(null) != null;
+    public void stop() {
+        System.out.println("Stopping features");
+        for(BotFeature feature : this.features.values())
+            feature.handleStop();
+
+        System.exit(0);
+    }
+
+    public void reload() {
+        System.out.println("Stopping features");
+        for (BotFeature feature : this.features.values())
+            feature.handleStop();
+
+        this.configurationProvider.getCache().clear();
+
+        this.addFeatures();
+    }
+
+    public Guild getMainGuild() {
+        return this.jda.getGuilds().get(0);
+    }
+
+    public boolean memberHasRole(Member member, Collection<Long> roleIds) {
+        return member != null && (roleIds.isEmpty() || member.getRoles().stream()
+                .filter(role -> roleIds.contains(role.getIdLong())).findFirst().orElse(null) != null);
+    }
+
+    public boolean userHasRole(User user, Collection<Long> roleIds) {
+        Guild guild = this.getMainGuild();
+        return this.memberHasRole(guild.getMember(user), roleIds);
     }
 
     public <Configuration extends GeneralConfiguration> void addFeature(BotFeature<Configuration> botFeature, String configName, Configuration defaultConfiguration) {
-        boolean existsConfig = this.configCollectionManager.exists(configName);
+        boolean existsConfig = this.configurationProvider.exists(configName);
         if(!existsConfig)
-            this.configCollectionManager.insert(configName, defaultConfiguration);
-        Configuration configuration = existsConfig ? this.configCollectionManager
+            this.configurationProvider.insert(configName, defaultConfiguration);
+        Configuration configuration = existsConfig ? this.configurationProvider
                 .getConfiguration(configName, (Class<? extends Configuration>) defaultConfiguration.getClass()) : defaultConfiguration;
         botFeature.handleStart(this, configuration);
         System.out.println("Started feature " + botFeature.getClass().getSimpleName());
@@ -148,7 +173,7 @@ public class TheSystemsBot {
         return features;
     }
 
-    public ConfigurationProvider getConfigCollectionManager() {
-        return configCollectionManager;
+    public ConfigurationProvider getConfigurationProvider() {
+        return configurationProvider;
     }
 }

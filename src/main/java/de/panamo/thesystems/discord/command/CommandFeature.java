@@ -1,13 +1,12 @@
 package de.panamo.thesystems.discord.command;
 
 import de.panamo.thesystems.discord.TheSystemsBot;
-import de.panamo.thesystems.discord.command.executor.PresenceCommandExecutor;
+import de.panamo.thesystems.discord.command.single.PollCommandExecutor;
+import de.panamo.thesystems.discord.richpresence.command.PresenceCommandExecutor;
 import de.panamo.thesystems.discord.command.info.Command;
 import de.panamo.thesystems.discord.feature.BotFeature;
 import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.entities.Message;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
@@ -38,6 +37,7 @@ public class CommandFeature extends ListenerAdapter implements BotFeature<Comman
         }
 
         this.getCommand("presence").setCommandExecutor(new PresenceCommandExecutor().setInstance(instance));
+        this.getCommand("poll").setCommandExecutor(new PollCommandExecutor().setInstance(instance));
 
         instance.getJDA().addEventListener(this);
         this.readConsole();

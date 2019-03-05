@@ -1,4 +1,4 @@
-package de.panamo.thesystems.discord.command.executor;
+package de.panamo.thesystems.discord.richpresence.command;
 
 import de.panamo.thesystems.discord.command.info.Command;
 import de.panamo.thesystems.discord.command.info.CommandExecutor;

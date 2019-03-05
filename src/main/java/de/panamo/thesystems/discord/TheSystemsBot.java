@@ -58,8 +58,6 @@ public class TheSystemsBot {
         jda = new JDABuilder()
                 .setToken(botConfiguration.getBotToken())
                 .setStatus(OnlineStatus.ONLINE)
-                .setAutoReconnect(true)
-                .setEnableShutdownHook(true)
                 .build();
 
         System.out.println("Connecting to ArangoDB...");

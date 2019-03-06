@@ -1,7 +1,9 @@
 package de.panamo.thesystems.discord.richpresence;
 
 import de.panamo.thesystems.discord.TheSystemsBot;
+import de.panamo.thesystems.discord.command.CommandFeature;
 import de.panamo.thesystems.discord.feature.BotFeature;
+import de.panamo.thesystems.discord.richpresence.command.PresenceCommandExecutor;
 
 import java.util.List;
 import java.util.Random;
@@ -28,6 +30,8 @@ public class RichPresenceFeature implements BotFeature<RichPresenceConfiguration
                 instance.getJDA().getPresence().setGame(randomPresence.toGame());
             }
         }, 0, configuration.getChangeMillis());
+
+        instance.getFeature(CommandFeature.class).getCommand("presence").setCommandExecutor(new PresenceCommandExecutor().setInstance(instance));
     }
 
     @Override

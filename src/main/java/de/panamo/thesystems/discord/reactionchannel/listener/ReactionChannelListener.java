@@ -1,21 +1,20 @@
 package de.panamo.thesystems.discord.reactionchannel.listener;
 
-
 import de.panamo.thesystems.discord.reactionchannel.category.ReactionChannelCategory;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
+import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.core.events.message.guild.react.GuildMessageReactionAddEvent;
 
 public class ReactionChannelListener {
 
     /**
      * Handles a new message in a reaction channel
      *
-     * @param event the JDA-event for new messages
+     * @param message the JDA-message which was received
      * @param category the category the event was triggered on
      * @return if there should be reactions added to the new message
      */
 
-    public boolean handleMessageSent(MessageReceivedEvent event, ReactionChannelCategory category) {
+    public boolean handleMessageSent(Message message, ReactionChannelCategory category) {
         return true;
     }
 
@@ -26,7 +25,7 @@ public class ReactionChannelListener {
      * @param category the category the event was triggered on
      */
 
-    public void handleReactionAddedAllowed(MessageReactionAddEvent event, ReactionChannelCategory category) {
+    public void handleReactionAddedAllowed(GuildMessageReactionAddEvent event, ReactionChannelCategory category) {
 
     }
 
@@ -38,7 +37,7 @@ public class ReactionChannelListener {
      * @return if the reaction should be removed from the message
      */
 
-    public boolean handleReactionAddedForbidden(MessageReactionAddEvent event, ReactionChannelCategory category) {
+    public boolean handleReactionAddedForbidden(GuildMessageReactionAddEvent event, ReactionChannelCategory category) {
         return true;
     }
 

@@ -1,7 +1,9 @@
-package de.panamo.thesystems.discord.command.single;
+package de.panamo.thesystems.discord.poll.command;
 
 import de.panamo.thesystems.discord.command.info.Command;
 import de.panamo.thesystems.discord.command.info.CommandExecutor;
+import de.panamo.thesystems.discord.poll.PollConfiguration;
+import de.panamo.thesystems.discord.poll.PollFeature;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.User;
@@ -15,6 +17,8 @@ public class PollCommandExecutor extends CommandExecutor {
     @Override
     public boolean handleCommandExecution(Command command, Message message, String[] args) {
         if(args.length > 0) {
+            PollConfiguration configuration = super.instance.getFeature(PollFeature.class).getConfiguration();
+
             User user = message.getAuthor();
 
             EmbedBuilder embedBuilder = new EmbedBuilder();
@@ -25,8 +29,10 @@ public class PollCommandExecutor extends CommandExecutor {
             String argumentText = String.join(" ", args).trim();
             if(argumentText.contains("|")) {
 
+                embedBuilder.setTitle(configuration.getMultiAnswerPollTitle());
+
                 String[] splitText = argumentText.split("\\|");
-                if(splitText.length < 2)
+                if(splitText.length < 3 || splitText.length > 21)
                     return false;
 
                 embedBuilder.addField("Question", splitText[0], false);
@@ -41,15 +47,20 @@ public class PollCommandExecutor extends CommandExecutor {
                 message.getTextChannel().sendMessage(embedBuilder.build()).queue(newMessage -> {
                     for(int i = 0; i < answerOptions.length; i++)
                         newMessage.addReaction(this.getLetterUnicodeByIndex(i)).queue();
+
+                    message.delete().queue();
                 });
 
             } else {
                 String pollQuestion = String.join(" ", args);
+                embedBuilder.setTitle(configuration.getPollTitle());
                 embedBuilder.addField("Question", pollQuestion, false);
 
                 message.getTextChannel().sendMessage(embedBuilder.build()).queue(newMessage -> {
-                    newMessage.addReaction(super.instance.getMainGuild().getEmoteById(548557344108183565L)).queue();
-                    newMessage.addReaction(super.instance.getMainGuild().getEmoteById(548557272436178959L)).queue();
+                    newMessage.addReaction(super.instance.getMainGuild().getEmoteById(configuration.getPositiveEmoteId())).queue();
+                    newMessage.addReaction(super.instance.getMainGuild().getEmoteById(configuration.getNegativeEmoteId())).queue();
+
+                    message.delete().queue();
                 });
             }
             return true;

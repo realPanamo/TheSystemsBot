@@ -10,6 +10,10 @@ import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.MessageReaction;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.core.events.message.guild.GuildMessageUpdateEvent;
+import net.dv8tion.jda.core.events.message.guild.react.GuildMessageReactionAddEvent;
+import net.dv8tion.jda.core.events.message.guild.react.GuildMessageReactionRemoveAllEvent;
 import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.core.events.message.react.MessageReactionRemoveAllEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
@@ -69,7 +73,7 @@ public class ReactionChannelFeature extends ListenerAdapter implements BotFeatur
     }
 
     @Override
-    public void onMessageReceived(MessageReceivedEvent event) {
+    public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
         if(event.getAuthor().isBot())
             return;
 
@@ -79,16 +83,23 @@ public class ReactionChannelFeature extends ListenerAdapter implements BotFeatur
             return;
 
         if(this.listeners.containsKey(category.getName())) {
-            if(!this.listeners.get(category.getName()).handleMessageSent(event, category))
+            if(!this.listeners.get(category.getName()).handleMessageSent(event.getMessage(), category))
                 return;
         }
 
         this.addReactions(category, event.getMessage());
     }
 
+    @Override
+    public void onGuildMessageUpdate(GuildMessageUpdateEvent event) {
+        ReactionChannelCategory category = this.getCategoryByChannel(event.getChannel());
+
+        if(category != null && this.listeners.containsKey(category.getName()))
+            this.listeners.get(category.getName()).handleMessageSent(event.getMessage(), category);
+    }
 
     @Override
-    public void onMessageReactionAdd(MessageReactionAddEvent event) {
+    public void onGuildMessageReactionAdd(GuildMessageReactionAddEvent event) {
         if(event.getUser().isBot())
             return;
 
@@ -122,7 +133,7 @@ public class ReactionChannelFeature extends ListenerAdapter implements BotFeatur
     }
 
     @Override
-    public void onMessageReactionRemoveAll(MessageReactionRemoveAllEvent event) {
+    public void onGuildMessageReactionRemoveAll(GuildMessageReactionRemoveAllEvent event) {
         ReactionChannelCategory category = this.getCategoryByChannel(event.getChannel());
 
         if(category != null && !category.getReactions().isEmpty())

@@ -10,6 +10,8 @@ import de.panamo.thesystems.discord.configuration.provider.ConfigurationProvider
 import de.panamo.thesystems.discord.configuration.provider.FileConfigurationProvider;
 import de.panamo.thesystems.discord.configuration.GeneralConfiguration;
 import de.panamo.thesystems.discord.feature.BotFeature;
+import de.panamo.thesystems.discord.poll.PollConfiguration;
+import de.panamo.thesystems.discord.poll.PollFeature;
 import de.panamo.thesystems.discord.reactionchannel.ReactionChannelConfiguration;
 import de.panamo.thesystems.discord.reactionchannel.ReactionChannelFeature;
 import de.panamo.thesystems.discord.richpresence.RichPresenceConfiguration;
@@ -105,9 +107,10 @@ public class TheSystemsBot {
     }
 
     private void addFeatures() {
-        this.addFeature(new RichPresenceFeature(), "richpresence", new RichPresenceConfiguration());
-        this.addFeature(new ReactionChannelFeature(), "reactionchannel", new ReactionChannelConfiguration());
         this.addFeature(new CommandFeature(), "command", new CommandConfiguration());
+        this.addFeature(new RichPresenceFeature(), "richpresence", new RichPresenceConfiguration());
+        this.addFeature(new PollFeature(), "poll", new PollConfiguration());
+        this.addFeature(new ReactionChannelFeature(), "reactionchannel", new ReactionChannelConfiguration());
     }
 
     public void stop() {

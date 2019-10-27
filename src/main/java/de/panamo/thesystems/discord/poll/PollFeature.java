@@ -5,11 +5,11 @@ import de.panamo.thesystems.discord.TheSystemsBot;
 import de.panamo.thesystems.discord.command.CommandFeature;
 import de.panamo.thesystems.discord.feature.BotFeature;
 import de.panamo.thesystems.discord.poll.command.PollCommandExecutor;
-import net.dv8tion.jda.core.entities.Message;
-import net.dv8tion.jda.core.entities.MessageEmbed;
-import net.dv8tion.jda.core.entities.MessageReaction;
-import net.dv8tion.jda.core.events.message.guild.react.GuildMessageReactionAddEvent;
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.MessageReaction;
+import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class PollFeature extends ListenerAdapter implements BotFeature<PollConfiguration> {
     private TheSystemsBot instance;
@@ -31,7 +31,7 @@ public class PollFeature extends ListenerAdapter implements BotFeature<PollConfi
             return;
 
         TheSystemsBot.THREAD_POOL.execute(() -> {
-            Message message = event.getChannel().getMessageById(event.getMessageId()).complete();
+            Message message = event.getChannel().retrieveMessageById(event.getMessageId()).complete();
             // the get the fresh reaction on the message
             MessageReaction reaction = message.getReactions().stream().filter(value ->
                     value.getReactionEmote().equals(event.getReaction().getReactionEmote())).findFirst().orElse(event.getReaction());
@@ -44,7 +44,7 @@ public class PollFeature extends ListenerAdapter implements BotFeature<PollConfi
                 if(embed.getTitle().equalsIgnoreCase(this.configuration.getPollTitle())) {
                     // searching for an already existing reaction of the user, which is not the new added one
                     MessageReaction existingReaction = message.getReactions().stream().filter(value ->
-                            !value.getReactionEmote().equals(reaction.getReactionEmote()) && value.getUsers().complete().contains(event.getUser()))
+                            !value.getReactionEmote().equals(reaction.getReactionEmote()) && value.retrieveUsers().complete().contains(event.getUser()))
                             .findFirst().orElse(null);
 
                     // removing the reaction if the user already reacted or he tries to add a new reaction

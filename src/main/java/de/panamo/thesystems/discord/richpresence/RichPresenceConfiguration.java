@@ -2,7 +2,7 @@ package de.panamo.thesystems.discord.richpresence;
 
 
 import de.panamo.thesystems.discord.configuration.GeneralConfiguration;
-import net.dv8tion.jda.core.entities.Game;
+import net.dv8tion.jda.api.entities.Activity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,11 +22,11 @@ public class RichPresenceConfiguration implements GeneralConfiguration {
 
     public static class RichPresence {
 
-        private Game.GameType gameType;
+        private Activity.ActivityType activityType;
         private String text;
 
-        public RichPresence(Game.GameType gameType, String text) {
-            this.gameType = gameType;
+        public RichPresence(Activity.ActivityType activityType, String text) {
+            this.activityType = activityType;
             this.text = text;
         }
 
@@ -34,8 +34,8 @@ public class RichPresenceConfiguration implements GeneralConfiguration {
             return text;
         }
 
-        Game toGame() {
-            return Game.of(this.gameType, this.text);
+        Activity toActivity() {
+            return Activity.of(this.activityType, this.text);
         }
 
     }

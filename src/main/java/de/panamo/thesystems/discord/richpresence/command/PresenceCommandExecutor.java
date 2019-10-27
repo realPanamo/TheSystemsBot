@@ -4,9 +4,9 @@ import de.panamo.thesystems.discord.command.info.Command;
 import de.panamo.thesystems.discord.command.info.CommandExecutor;
 import de.panamo.thesystems.discord.richpresence.RichPresenceConfiguration;
 import de.panamo.thesystems.discord.richpresence.RichPresenceFeature;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.Game;
-import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.Message;
 import java.awt.*;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
@@ -23,16 +23,16 @@ public class PresenceCommandExecutor extends CommandExecutor {
             switch (commandName) {
                 case "add":
                     if(args.length > 2) {
-                        Game.GameType gameType;
+                        Activity.ActivityType activityType;
                         try {
-                            gameType = Game.GameType.valueOf(args[1].toUpperCase());
+                            activityType = Activity.ActivityType.valueOf(args[1].toUpperCase());
                         } catch (Exception exception) {
                             this.basicResponseEmbed(message, Color.RED, "Wrong gameTye!", "Available types: " +
-                                    Arrays.stream(Game.GameType.values()).map(Enum::toString).collect(Collectors.joining(", ")));
+                                    Arrays.stream(Activity.ActivityType.values()).map(Enum::toString).collect(Collectors.joining(", ")));
                             return true;
                         }
                         richPresenceFeature.getConfiguration().getRichPresences().add(
-                                new RichPresenceConfiguration.RichPresence(gameType, this.collectText(args, 2)));
+                                new RichPresenceConfiguration.RichPresence(activityType, this.collectText(args, 2)));
                         super.instance.getConfigurationProvider().save("richpresence", richPresenceFeature.getConfiguration());
                         this.basicResponseEmbed(message, Color.GREEN, "Success!", "Presence was added successfully!");
                     } else

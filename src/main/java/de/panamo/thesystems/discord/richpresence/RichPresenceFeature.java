@@ -27,7 +27,7 @@ public class RichPresenceFeature implements BotFeature<RichPresenceConfiguration
             @Override
             public void run() {
                 RichPresenceConfiguration.RichPresence randomPresence = richPresences.get(random.nextInt(richPresences.size()));
-                instance.getJDA().getPresence().setGame(randomPresence.toGame());
+                instance.getJDA().getPresence().setActivity(randomPresence.toActivity());
             }
         }, 0, configuration.getChangeMillis());
 

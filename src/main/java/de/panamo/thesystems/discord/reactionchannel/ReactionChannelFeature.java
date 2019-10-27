@@ -6,17 +6,17 @@ import de.panamo.thesystems.discord.reactionchannel.category.ReactionChannelCate
 import de.panamo.thesystems.discord.reactionchannel.category.ReactionChannelReaction;
 import de.panamo.thesystems.discord.reactionchannel.listener.ReactionChannelListener;
 import de.panamo.thesystems.discord.reactionchannel.listener.TemplateListener;
-import net.dv8tion.jda.core.entities.Message;
-import net.dv8tion.jda.core.entities.MessageChannel;
-import net.dv8tion.jda.core.entities.MessageReaction;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.core.events.message.guild.GuildMessageUpdateEvent;
-import net.dv8tion.jda.core.events.message.guild.react.GuildMessageReactionAddEvent;
-import net.dv8tion.jda.core.events.message.guild.react.GuildMessageReactionRemoveAllEvent;
-import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
-import net.dv8tion.jda.core.events.message.react.MessageReactionRemoveAllEvent;
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.MessageReaction;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageUpdateEvent;
+import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
+import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionRemoveAllEvent;
+import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
+import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveAllEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -113,9 +113,9 @@ public class ReactionChannelFeature extends ListenerAdapter implements BotFeatur
             ReactionChannelListener listener = this.listeners.get(category.getName().toLowerCase());
 
             // getting an already existing reaction of the user, which is not the new added one
-            Message message = event.getChannel().getMessageById(event.getMessageId()).complete();
+            Message message = event.getChannel().retrieveMessageById(event.getMessageId()).complete();
             MessageReaction existingReaction = message.getReactions().stream().filter(value ->
-                    !value.getReactionEmote().equals(emote) && value.getUsers().complete().contains(event.getUser())).findFirst().orElse(null);
+                    !value.getReactionEmote().equals(emote) && value.retrieveUsers().complete().contains(event.getUser())).findFirst().orElse(null);
 
             // getting the current reaction but as ReactionChannelReaction
             ReactionChannelReaction reaction = category.getReactions().stream()
@@ -137,7 +137,7 @@ public class ReactionChannelFeature extends ListenerAdapter implements BotFeatur
         ReactionChannelCategory category = this.getCategoryByChannel(event.getChannel());
 
         if(category != null && !category.getReactions().isEmpty())
-            event.getChannel().getMessageById(event.getMessageIdLong()).queue(message -> this.addReactions(category, message));
+            event.getChannel().retrieveMessageById(event.getMessageIdLong()).queue(message -> this.addReactions(category, message));
     }
 
     @Override

@@ -1,8 +1,8 @@
 package de.panamo.thesystems.discord.reactionchannel.listener;
 
 import de.panamo.thesystems.discord.reactionchannel.category.ReactionChannelCategory;
-import net.dv8tion.jda.core.entities.Message;
-import net.dv8tion.jda.core.events.message.guild.react.GuildMessageReactionAddEvent;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 
 public class ReactionChannelListener {
 

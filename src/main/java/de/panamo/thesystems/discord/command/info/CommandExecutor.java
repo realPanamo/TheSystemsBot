@@ -1,7 +1,7 @@
 package de.panamo.thesystems.discord.command.info;
 
 import de.panamo.thesystems.discord.TheSystemsBot;
-import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.api.entities.Message;
 
 public abstract class CommandExecutor {
     protected TheSystemsBot instance;

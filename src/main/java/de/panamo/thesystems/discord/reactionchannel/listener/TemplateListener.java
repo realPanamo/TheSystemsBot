@@ -1,8 +1,8 @@
 package de.panamo.thesystems.discord.reactionchannel.listener;
 
 import de.panamo.thesystems.discord.reactionchannel.category.ReactionChannelCategory;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Message;
 import java.awt.*;
 import java.util.concurrent.TimeUnit;
 

@@ -2,7 +2,7 @@ package de.panamo.thesystems.discord.richpresence;
 
 
 import de.panamo.thesystems.discord.configuration.GeneralConfiguration;
-import net.dv8tion.jda.core.entities.Game;
+import net.dv8tion.jda.api.entities.Activity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,26 +12,30 @@ public class RichPresenceConfiguration implements GeneralConfiguration {
     private long changeMillis = TimeUnit.SECONDS.toMillis(30);
     private List<RichPresence> richPresences = new ArrayList<>();
 
-    long getChangeMillis() {
+    public long getChangeMillis() {
         return changeMillis;
     }
 
-    List<RichPresence> getRichPresences() {
+    public List<RichPresence> getRichPresences() {
         return richPresences;
     }
 
-    public class RichPresence {
+    public static class RichPresence {
 
-        private Game.GameType gameType;
+        private Activity.ActivityType activityType;
         private String text;
 
-        public RichPresence(Game.GameType gameType, String text) {
-            this.gameType = gameType;
+        public RichPresence(Activity.ActivityType activityType, String text) {
+            this.activityType = activityType;
             this.text = text;
         }
 
-        Game toGame() {
-            return Game.of(this.gameType, this.text);
+        public String getText() {
+            return text;
+        }
+
+        Activity toActivity() {
+            return Activity.of(this.activityType, this.text);
         }
 
     }

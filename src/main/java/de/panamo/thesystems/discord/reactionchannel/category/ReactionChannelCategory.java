@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.List;
 
 public class ReactionChannelCategory {
-
     private String name;
     private Collection<Long> channels;
     private List<ReactionChannelReaction> reactions;

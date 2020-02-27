@@ -9,4 +9,6 @@ public interface BotFeature<Configuration extends GeneralConfiguration> {
 
     void handleStop();
 
+    Configuration getConfiguration();
+
 }

@@ -6,7 +6,6 @@ import java.util.Collection;
 import java.util.HashSet;
 
 public class ReactionChannelConfiguration implements GeneralConfiguration {
-
     private Collection<ReactionChannelCategory> reactionChannelCategories = new HashSet<>();
 
     Collection<ReactionChannelCategory> getReactionChannelCategories() {

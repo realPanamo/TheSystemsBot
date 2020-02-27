@@ -3,7 +3,6 @@ package de.panamo.thesystems.discord;
 import de.panamo.thesystems.discord.configuration.GeneralConfiguration;
 
 class BotConfiguration implements GeneralConfiguration {
-
     private String botToken, databaseHost, databaseUser, databasePassword, database;
     private int databasePort;
 
